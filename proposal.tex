@@ -2,17 +2,19 @@
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
 
-% Math Packages
-\usepackage{amsmath, amssymb, amsthm, amsfonts}
-\usepackage{mathtools} % For advanced math symbols
 
-% Formatting
-\usepackage{booktabs} % For professional tables
-\usepackage{graphicx} % To include your proposal_plots_combined.pdf
-\usepackage{cite}     % For handling citations
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+\usepackage{mathtools} 
+
+
+\usepackage{booktabs} 
+\usepackage{graphicx}
+\usepackage{hyperref}
+
 
 \title{Measuring Byte-Pair Tokenization Correlation with Morphological Complexity}
-\author{Sam Whitney}
+\author{Sam Whitney \\ Dr. Osita Onyejekwe \\ CSCI 3100 - Data Science }
+
 \date{\today}
 
 \begin{document}
@@ -83,13 +85,15 @@ The results of four plots are below
 \begin{figure}[h]
     \centering
     \caption{\textit{Exploratory Analysis of BPE Tokenization of English, Rarámuri and Nahuatl language samples}}
-    \includegraphics[width=0.8\textwidth]{preliminaryDataPlots.png}
+    \includegraphics[width=0.8\textwidth]{images/preliminaryDataPlots.png}
     \label{fig:seaborn_plots}
 \end{figure}
 
 \section{Findings}
 
 These results show the expected relationship between tokens and words, as well as a likely signature for morphological signature in the relationship between number of words and mean tokens per sample. Expanding the dataset to include parallel language samples in more languages could help confirm these findings, and bootstrapping the distribution of fertility/productivity across these and more languages could reveal the true dstribution of the productivity of tokenization per language. If the dataset is expanded to include more languages across the spectrum of analytic to agglutinative, and the bootstrapped distribution shows a similar trend to what is expected based on the Index of Agglutination, it would provide evidence that further investigation into the ability for BPE tokenization to quantify the analytic or agglutinative characteristics of language. 
+
+All code files are on github at \url{https://github.com/samAmabile/bpEncode}, including the .tex source code for this proposal. 
 
 \newpage
 
