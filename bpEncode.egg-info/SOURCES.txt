@@ -1,0 +1,7 @@
+bpe.cpp
+pyproject.toml
+setup.py
+bpEncode.egg-info/PKG-INFO
+bpEncode.egg-info/SOURCES.txt
+bpEncode.egg-info/dependency_links.txt
+bpEncode.egg-info/top_level.txt

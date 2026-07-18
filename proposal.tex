@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+
+% Math Packages
+\usepackage{amsmath, amssymb, amsthm, amsfonts}
+\usepackage{mathtools} % For advanced math symbols
+
+% Formatting
+\usepackage{booktabs} % For professional tables
+\usepackage{graphicx} % To include your proposal_plots_combined.pdf
+\usepackage{cite}     % For handling citations
+
+\title{Measuring Byte-Pair Tokenization Correlation with Morphological Complexity}
+\author{Sam Whitney}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+Byte-pair encoding (BPE) is the industry standard method for converting text to numerically encoded tokens for deep learning in neural networks. The benefit of the method is that it scans text of any script and finds frequently adjacent characters and merges them into single tokens. This can improve efficiency for processing billions of tokens of text, but most importantly it encodes units of meaning for the network to learn patterns and relationships within the text. 
+
+Morphology is the study of the sub-word morphemes, which are units of meaning that are combined to build words. Every language has morphemes, but there is significant variety in how languages divide meaning and use affixes. 
+
+Agglutinative and polysythetic languages are languages that have a tendency to build words out of many subword morphemes, while more analytic languages tend to use separate words and meaning is determined more by word order. 
+
+If BPE is designed to only work within word boundaries and find sub-word patterns, it may work as a rough approximation of the morphological breakdown of a language. This would be particularly useful for low resource languages for which there is limited research and literature about the morphological structure of the language. If tokenization using BPE can be shown to positively correlate with the level of agglutination in a language, it would show that further investigation is warranted into the ability of the algorithm to identify morphological patterns and help quantify the analytic or agglutinative nature of low resource languages. 
+
+\section{Hypotheses}
+\begin{itemize}
+    \item \textbf{Null Hypothesis ($H_0$):}  There is no statistically significant correlation between the ratio of tokens to words produced by BPE and the morphological character of a language.
+    \item \textbf{Alternative Hypothesis ($H_a$):} Samples from polysythetic and agglutinative languages will produce a higher token to word ratio when tokenized with BPE than is produced by for parallel linguistic samples from analytic languages.
+\end{itemize}
+
+\section{Methodology}
+To control the inputs, limitations, and outputs of the BPE algorithm, a basic Byte-pair encoding program written in C++ and python will be used. This implementation is designed to limit tokenization to sub-word patterns, preventing the model from combining characters across word boundaries. This will ensure that all tokenization is of sub-word units and not of super-word units, or combinations of spaces and words, or the end of one word with the beginning of the other. The algorithm is based on the process outlined by Sebastian Raschka on his website in the 2025 article \textit{Implementing A Byte Pair Encoding (BPE) Tokenizer From Scratch}. 
+
+To measure the correlation of tokenization to agglutination, the Index of Agglutination is used to measure the ratio of unmodified construction to the total number of morpheme boudaries. For the present work the 2021 paper by Rathi et al. \textit{An Information-Theoretic Characterization of Morpholgical Fusion} will be used to identify suitable languages for the test. For the proof-of-concept, two agglutinative languages form the Uto-Aztecan language family (De Felice, 2012) will be used and compared with English, a known analytic language (Krasniqi and Ramadani, 2022). 
+
+To control for language domain, and becuase Nahuatl and Raramuri have limited available linguistic resources, translations of the Modern English Bible scraped from ScriptureEarth.org were used as the corpora for the exploratory process. 
+
+
+\section{Exploratory Analysis} 
+
+Using python and the custom BPE algorithm, a text file of the Modern English Bible was loaded into python. Text was cleaned of digits and punctuation, and made lower-case. A representative sample of each language sample was parsed from the beginnig, middle, and end of the corpus. This sample was used to fit the BPE models to each of the languages. 
+
+Once the BPE models were fit, the text was broken into batches of 1000, 2000, 4000, 8000, 16000, 32000 and 64000 words for tokenization. This was done to test if the ratio of tokens to words changes with larger sample sizes, or if it stays constant.
+
+During the tokenization process the language, number of words, number of BPE tokens, and the ratio of tokens to words were calculated and saved to a dataframe. This ratio is referred to as the "productivity" or "fertility" of the language with respect to BPE tokenization, and it is the primary statistic of concern for the proposed experiment. It can be defined as 
+
+\[
+    P_{t, w} = \frac{\text{Total Tokens}}{\text{Total Words}} 
+\]
+
+Or the proportion $P$ of tokens to words. It can also be understood as the average number of tokens each word is parsed into by the algorithm. The model was tested at various limits to the maximum number of tokens it is allowed to produce from 200 up to 15,000. 
+
+Additionally, for each word in a batch, the number of tokens BPE produced for the word was calcultated and save to a numpy array, and the mean of this array was taken and compared to the mean of an array of the number of characters per word. This additionall calculation can be used to test consistency, and to map how the distribution of average tokens per word changes as the size of the batch of words being tokenized increases. 
+
+\newpage
+\section{Preliminary Results}
+
+The results of the exploratory data analysis showed the following results 
+\begin{table}[htbp]
+    \centering
+    \caption{\textbf{Mean and Standard Deviation of Token-to-Word Ratios.}}
+    \label{tab:Tokens to Words}
+    \begin{tabular}{l c c}
+        \toprule
+        \textbf{Language} & \textbf{Mean Ratio} & \textbf{Std. Deviation} \\
+        \midrule
+        English  & 5.12  & 0.15 \\
+        Nahuatl  & 7.68  & 0.24 \\
+        Rarámuri & 7.81  & 0.19 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Additionally, with the data collected and stored in a csv additional visualization was done with python and seaborn as exploratory analysis to see what relationships warrant further investigation. A line plot of number of words to token/word ratio was plotted to mshow morphological stability as sample sizes increase, a scatterplot of number of words to mean tokens per word (measured per word per sample) was made to hopefully show a morphological signature for each language, a histogram of mean tokens per word was plotted to show the distribution of token productivity or "fertility" across the three languages, and finally a scatterplot with a regression line was plotted of number of words to number of tokens, which is expected to show a clear linear relationship. 
+The results of four plots are below
+
+\begin{figure}[h]
+    \centering
+    \caption{\textit{Exploratory Analysis of BPE Tokenization of English, Rarámuri and Nahuatl language samples}}
+    \includegraphics[width=0.8\textwidth]{preliminaryDataPlots.png}
+    \label{fig:seaborn_plots}
+\end{figure}
+
+\section{Findings}
+
+These results show the expected relationship between tokens and words, as well as a likely signature for morphological signature in the relationship between number of words and mean tokens per sample. Expanding the dataset to include parallel language samples in more languages could help confirm these findings, and bootstrapping the distribution of fertility/productivity across these and more languages could reveal the true dstribution of the productivity of tokenization per language. If the dataset is expanded to include more languages across the spectrum of analytic to agglutinative, and the bootstrapped distribution shows a similar trend to what is expected based on the Index of Agglutination, it would provide evidence that further investigation into the ability for BPE tokenization to quantify the analytic or agglutinative characteristics of language. 
+
+\newpage
+
+\section{References}
+
+\begin{enumerate}
+    \item De Felice, D. (2015). Nahuatl as a classical, foreign, and additional language: A phenomenological study. The Qualitative Report. https://doi.org/10.46743/2160-3715/2012.1725
+
+    \item Gutman, A. (2024). Utoaztecan. Languagesgulper.Com. https://www.languagesgulper.com/eng/Utoaztecan.html
+
+    \item Krasniqi, K., \& Ramadani, F. (2022). Changes in the english language from synthetic to analytic: An argumentative approach. https://resmilitaris.net/uploads/paper/e5a333c5798fa0c4505d8158646960ea.pdf
+
+    \item Raschka, S. (2025, January 17). Implementing a byte pair encoding (BPE) tokenizer from Scratch. Sebastian Raschka, PhD. https://sebastianraschka.com/blog/2025/bpe-from-scratch.html
+
+    \item Rathi, N., Hahn, M., \& Futrell, R. (1012). An Information-Theoretic characterization of Morphological fusion (p. 10115). Association for Computational Linguistics. https://aclanthology.org/2021.emnlp-main.793.pdf
+
+    \item Scripture Earth. (2026a). World English Bible - Nahuatl Translation . Scriptureearth.org. https://www.scriptureearth.org/viewer/views.php?iso=nhw\&rod\_code=00000&variant\_code=\&rod\_var=\&rtl=0\&st=eng
+
+    \item Scripture Earth. (2026b). World English Bible - Raramuri Translation. Scriptureearth.org. https://www.scriptureearth.org/viewer/views.php?iso=tac\&rod\_code=00000&variant\_code=&rod\_var=\&rtl=0\&st=eng
+
+    \item Zouhar, V., Meister, C., Luis, J., Li, G., Vieira, T., Mrinmaya, J., Cotterell, R., \& Eth, E. (2024). A formal perspective on byte-pair encoding. https://arxiv.org/pdf/2306.16837
+
+\end{enumerate}
+\end{document}

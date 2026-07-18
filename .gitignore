@@ -1,0 +1,19 @@
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Bibliography files
+*.bbl
+*.blg
+
+# Index files
+*.idx
+*.ilg
+*.ind
+
+/ignore
