@@ -34,6 +34,8 @@ def makeSample(text, size=20000):
     sample = words[:size]
     return ' '.join(sample)
 
+
+#TODO: resolve data paths :
 english_txt_raw = ""
 with open("english.txt", 'r', encoding='utf-8') as f:
     for line in f:

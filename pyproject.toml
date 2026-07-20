@@ -1,7 +1,12 @@
 [build-system]
-requires = ["setuptools>=42", "pybind11>=2.12"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core", "pybind11>=2.12"]
+build-backend = "scikit_build_core.build"
 
 [project]
 name = "bpEncode"
-version = "0.1"
+version = "0.1.0"
+description = "Byte-Pair Encoding tokenizer"
+requires-python = ">=3.8"
+
+[tool.scikit-build]
+wheel.install-dir = "src"

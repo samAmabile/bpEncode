@@ -1,6 +1,6 @@
 #include "bpe.hpp"
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
+//#include <pybind11/pybind11.h>
+//#include <pybind11/stl.h>
 #include <sstream>
 
 
@@ -40,9 +40,10 @@ std::vector<uint32_t> BPE::preTokenize(const std::string& text){
             encodedText.push_back(static_cast<uint32_t>(c));
         }
 
-        encodedText.push_back(WORD_END); 
 
     }
+
+    encodedText.push_back(WORD_END); 
 
     return encodedText;
     
@@ -94,6 +95,9 @@ uint64_t BPE::getBestPair() {
         uint64_t pair = top.second;
 
         if (pairCounts[pair] == top.first){
+
+            if (top.first < minFreq) return 0; 
+
             return pair; 
         }
 
@@ -118,8 +122,8 @@ void BPE::countSubwordPairs(std::vector<uint32_t>& buffer){
         uint32_t k = buffer[i]; 
         uint32_t j = buffer[i + 1];
 
-        if (k == WORD_START || k == WORD_END || k == SPACE ||
-            j == WORD_START || j == WORD_END || j == SPACE) {
+        if (k == WORD_START || k == WORD_END || k == SPACE || k == INVALID_TOKEN ||
+            j == WORD_START || j == WORD_END || j == SPACE || j == INVALID_TOKEN) {
             continue;
         }
         
@@ -127,8 +131,12 @@ void BPE::countSubwordPairs(std::vector<uint32_t>& buffer){
 
         uint64_t pair = (static_cast<uint64_t>(k) << 32) | j; 
         pairCounts[pair]++; 
-        pairQueue.push({pairCounts[pair], pair}); 
+        //pairQueue.push({pairCounts[pair], pair}); 
 
+    }
+
+    for (auto const& [pair, count] : pairCounts){
+        pairQueue.push({count, pair}); 
     }
 
 }
@@ -234,12 +242,18 @@ byte_map BPE::fitWords(const std::string& text){
     buffer = preTokenize(text); 
     uint32_t vocabSize = getVocabSize(); 
     countSubwordPairs(buffer);
+    int iterations = 0; 
     while (vocabSize <= LIMIT){
         uint64_t nextPair = getBestPair(); 
         if (vocabSize >= LIMIT) break;
         if (nextPair == 0) break;
+        if (pairCounts[nextPair] < minFreq) break;
         updateVocab(nextPair); 
         vocabSize = getVocabSize();
+
+        if (iterations % 500 == 0){
+            countSubwordPairs(buffer); 
+        }
     }
 
     return vocab;
@@ -389,8 +403,8 @@ void BPE::load(const std::string& filename){
 
     infile.close();
 }
-
-PYBIND11_MODULE(bpEncode, m) {
+//the pybind module logic, now in binding.cpp
+/*PYBIND11_MODULE(bpEncode, m) {
     m.doc() = "Byte-Pair Encoding Tokenizer";
 
     pybind11::class_<BPE>(m, "BPE")
@@ -406,7 +420,7 @@ PYBIND11_MODULE(bpEncode, m) {
         .def("getVocabSize", &BPE::getVocabSize, "returns the number of unique tokens in the vocab")
         .def("save", &BPE::save, "save merge rules to binary file to encode/decode future files that use the same scheme")
         .def("load", &BPE::load, "load merge rules to encode/decode files with a previously saved scheme");
-}
+}*/
 
 
 
