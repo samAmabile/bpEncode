@@ -22,9 +22,6 @@ target_link_libraries(_bpEncode PRIVATE bpe_lib pybind11::module)
 set_target_properties(_bpEncode PROPERTIES PREFIX "")
 #set_target_properties(bpEncode PROPERTIES OUTPUT_NAME "_bpEncode")
 
-add_executable(bpe_demo src/bpEncode/bpe_demo.cpp)
-target_link_libraries(bpe_demo PRIVATE bpe_lib)
-
 install(TARGETS _bpEncode DESTINATION src/bpEncode)
 
 
