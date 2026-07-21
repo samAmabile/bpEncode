@@ -2,9 +2,14 @@ import pandas as pd
 import numpy as np 
 import seaborn as sns 
 import matplotlib.pyplot as plt 
+from pathlib import Path 
 
+ROOT = Path(__file__).resolve().parent.parent
+DATA = ROOT / "data"
+SRC = ROOT / "src"
+IMG = ROOT / "images"
 
-df = pd.read_csv("proposal_data_demo_v8.csv") 
+df = pd.read_csv(DATA / "new_data_v1.csv") 
 
 sns.set_theme(style="whitegrid")
 fig, axes = plt.subplots(1, 4, figsize=(22, 5))
@@ -25,7 +30,7 @@ sns.regplot(data=df, x="num words", y="num tokens", scatter=True, ax=axes[3])
 axes[3].set_title("Global Fertility Rays")
 
 plt.tight_layout()
-plt.savefig("proposal_plots_combined_2.pdf")
+plt.savefig(IMG / "new_data_plots.pdf")
 plt.show()
 
 

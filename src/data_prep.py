@@ -1,10 +1,14 @@
 import pandas as pd 
 import numpy as np 
 import bpEncode 
-from bpEncode import BPE 
 import re 
 import string
 import importlib 
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DATA = ROOT / "data"
+SRC = ROOT / "src"
 
 importlib.reload(bpEncode)
 
@@ -12,17 +16,17 @@ importlib.reload(bpEncode)
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 
-english_corpus = open("english.txt", 'r', encoding='utf-8').read()
-raramuri_corpus = open("raramuri.txt", 'r', encoding='utf-8').read() 
-nahuatl_corpus = open("nahuatl.txt", 'r', encoding='utf-8').read() 
+english_corpus = open(DATA / "english.txt", 'r', encoding='utf-8').read()
+raramuri_corpus = open(DATA / "raramuri.txt", 'r', encoding='utf-8').read() 
+nahuatl_corpus = open(DATA / "nahuatl.txt", 'r', encoding='utf-8').read() 
 
-"""
+
 size_limit = 900000
 
 english_corpus = ' '.join(english_corpus.split()[:size_limit])
 raramuri_corpus = ' '.join(raramuri_corpus.split()[:size_limit])
 nahuatl_corpus = ' '.join(nahuatl_corpus.split()[:size_limit])
-"""
+
 def cleanText(text):
 
     punctuation = str.maketrans(string.punctuation, ' ' * len(string.punctuation))
@@ -33,7 +37,7 @@ def cleanText(text):
 
     return ' '.join(text.lower().split())
 
-def makeRepresentativeSample(text, size=300000): 
+def makeRepresentativeSample(text, size=120000): 
     words = text.strip().split()
     N = len(words)
     midpoint = N // 2
@@ -71,7 +75,7 @@ vocab_sizes = [200, 500, 1000, 5000, 10000, 15000]
 data = []
 
 def compile_data(corpus, language, size):
-    tokenizer = BPE()
+    tokenizer = bpEncode.BPE()
     tokenizer.setVocabSize(size)
 
     repSample = makeRepresentativeSample(corpus) 
@@ -125,12 +129,12 @@ for language, corpus in zip(languages, corpora):
 
 df = pd.DataFrame(master_data)
 
-df.to_csv("proposal_data_demo_v8.csv", index=False)
+df.to_csv(DATA / "new_data_v1.csv", index=False)
 
 
 stats_df = df.groupby(['language', 'bpe vocab limit'])['tokens : word'].agg(['mean', 'std'])
 
-stats_df.to_csv("proposal_stats_summary_v8.csv")
+stats_df.to_csv(DATA / "new_stats_v1.csv")
 
 
 
