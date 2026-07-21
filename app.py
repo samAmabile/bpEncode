@@ -64,11 +64,8 @@ if sample:
 
     st.subheader("Breakdown")
     st.markdown("**Byte-Pair token IDs:**")
-    tokenstr = "" 
-    for token in tokens:
-        tokenstr += token + " "
-
-    st.write(tokenstr)
+    tokenstr = " ".join(str(t) for t in tokens)
+    st.code(tokens)
 
     decoded = [] 
     for token in tokens:
