@@ -17,9 +17,13 @@ add_library(_bpEncode MODULE src/bpEncode/binding.cpp)
 #    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/bpEncode"
 #)
 
-set_target_properties(_bpEncode PROPERTIES PREFIX "")
 
-target_link_libraries(_bpEncode PRIVATE bpe_lib pybind11::module)
+set_target_properties(_bpEncode PROPERTIES 
+    PREFIX ""
+    LINKER_LANGUAGE CXX
+)
+
+target_link_libraries(_bpEncode PRIVATE bpe_lib pybind11::module stdc++)
 
 #set_target_properties(_bpEncode PROPERTIES PREFIX "")
 #set_target_properties(bpEncode PROPERTIES OUTPUT_NAME "_bpEncode")
