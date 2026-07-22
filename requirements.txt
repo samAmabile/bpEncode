@@ -1,3 +1,9 @@
+pandas
+numpy
+seaborn
+matplotlib
+pybind11
+scikit-build-core
 nltk 
 streamlit 
 -e .
