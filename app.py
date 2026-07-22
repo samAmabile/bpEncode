@@ -11,7 +11,20 @@ import pandas as pd
 import base64
 import matplotlib.pyplot as plt 
 import seaborn as sns 
+import unicodedata
 
+
+def sanitize_text(text):
+    if not text:
+        return ""
+
+    utf8_bytes = text.encode("utf-8", errors="ignore")
+
+    clean = utf8_bytes.decode("utf-8")
+
+    clean_txt = unicodedata.normalize("NFKC", clean)
+
+    return clean_txt
 
 def set_background(jpg):
     with open(jpg, "rb") as f:
@@ -128,9 +141,12 @@ with st.spinner(f"Loading {vocab_limit} token limit Brown corpus into tokenizer.
 
 st.sidebar.success("Model Loaded Succesfully")
 
-sample = st.text_input("Enter text to tokenize:", value="The quick brown mink mourned the folly of mankind")
+raw_sample = st.text_input("Enter text to tokenize:", value="The quick brown mink mourned the folly of mankind")
 
-if sample:
+if raw_sample:
+
+    sample = sanitize_text(raw_sample)
+
     tokens = tokenizer.tokenize(sample)
 
     
