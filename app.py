@@ -35,6 +35,19 @@ def set_background(jpg):
     section[data-testid="stSidebar"] {{
         background-color: rgba(15, 18, 25, 0.2);
     }}
+
+    h1, h2, h3, h4, h5, h6, p, span, label, div[data-testid="stMarkdownContainer"] {{
+        color: #38bdf8 !important;
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.8) !important;
+    }}
+
+    input {{
+        color: #38bdf8 !important;
+        background-color: rgba(20, 25, 35, 0.8) !important;
+        border: 1px solid rgba(56, 189, 248, 0.3) !important;
+        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.8);
+    }}
+
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
