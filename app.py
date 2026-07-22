@@ -20,14 +20,20 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-image: linear-gradient(rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.03)), url("data:image/jpg;base64,{encoded_str}");
+        background-image: linear-gradient(rgba(20, 24, 33, 0.03), rgba(20, 24, 33, 0.03)), url("data:image/jpg;base64,{encoded_str}");
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
     }}
 
+    .stMain, div.block-container {{
+        backround-color: rgba(20, 24, 33, 0.2);
+        border-radius: 12px;
+        padding: 2rem;
+    }}
+
     section[data-testid="stSidebar"] {{
-        background-color: rgba(15, 15, 15, 0.25);
+        background-color: rgba(15, 18, 25, 0.2);
     }}
     </style>
     """
