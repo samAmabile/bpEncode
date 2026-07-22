@@ -45,7 +45,6 @@ def set_background(jpg):
         color: #38bdf8 !important;
         background-color: rgba(20, 25, 35, 0.8) !important;
         border: 1px solid rgba(56, 189, 248, 0.3) !important;
-        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.8);
     }}
 
     </style>
