@@ -9,6 +9,9 @@ import nltk
 from nltk.corpus import brown
 import pandas as pd 
 import base64
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+
 
 def set_background(jpg):
     with open(jpg, "rb") as f:
@@ -17,13 +20,13 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/jpg;base64,{encoded_str}");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("data:image/jpg;base64,{encoded_str}");
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
     }}
 
-    section[data-textid="stSidebar"] {{
+    section[data-testid="stSidebar"] {{
         background-color: rgba(15, 15, 15, 0.85);
     }}
     </style>
@@ -144,6 +147,28 @@ if sample:
 
     chart_data = df.set_index("word")
 
-    st.line_chart(chart_data)
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    fig.patch.set_facecolor('#0e1117')
+    ax.set_facecolor('#0e1117')
+
+    sns.lineplot(data=df, x="word", y="tokens", marker="o", ax=ax, color="ff4b4b", linewidth=2.5)
+
+    ax.set_xlabel("Word", color="white")
+    ax.set_ylabel("Tokens", color="white")
+    ax.set_title("Tokens per word in your text", color="red")
+
+    ax.set_ylim(0, 10)
+
+    plt.xticks(rotation=30, ha="right", color="white")
+    plt.yticks(color="white")
+
+    ax.tick_params(colors="white")
+    for _ in ax.spines.values():
+        _.set_edgecolor('#555555')
+
+    fig.tight_layout()
+    st.pyplot(fig)
+
 
 
