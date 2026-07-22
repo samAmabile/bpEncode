@@ -10,14 +10,14 @@ from nltk.corpus import brown
 import pandas as pd 
 import base64
 
-def set_background(jpeg):
-    with open(jpeg, "rb") as f:
+def set_background(jpg):
+    with open(jpg, "rb") as f:
         encoded_str = base64.b64encode(f.read()).decode()
 
     css = f"""
     <style>
     .stApp {{
-        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/jpeg;base64,{encoded_str}");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/jpg;base64,{encoded_str}");
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
@@ -36,7 +36,7 @@ st.set_page_config(
     layout="centered"
 )
 
-set_background("images/owl_scowl.jpeg")
+set_background("images/owl_scowl.jpg")
 
 nltk.download('brown')
 
