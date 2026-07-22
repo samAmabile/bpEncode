@@ -38,7 +38,6 @@ def set_background(jpg):
 
     h1, h2, h3, h4, h5, h6, p, span, label, div[data-testid="stMarkdownContainer"] {{
         color: #38bdf8 !important;
-        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.8) !important;
     }}
 
     input {{
