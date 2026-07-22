@@ -12,19 +12,25 @@ import base64
 import matplotlib.pyplot as plt 
 import seaborn as sns 
 import unicodedata
+import re
 
 
-def sanitize_text(text):
-    if not text:
+def sanitize_text(text_raw):
+    if not text_raw:
         return ""
+    
+    if isinstance(text_raw, bytes):
+        text = text_raw
+    else:
+        text = str(text_raw).encode("utf-8", errors="ignore")
 
-    utf8_bytes = text.encode("utf-8", errors="replace")
-
-    clean = utf8_bytes.decode("utf-8")
+    clean = text.decode("utf-8", errors="ignore")
 
     clean_txt = unicodedata.normalize("NFKC", clean)
 
-    return clean_txt
+    clean_final = re.sub(r'[\u200b-\u200d\ufeff]', '', clean_txt)
+
+    return clean_final
 
 def set_background(jpg):
     with open(jpg, "rb") as f:
