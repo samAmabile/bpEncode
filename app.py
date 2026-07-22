@@ -7,12 +7,36 @@ import streamlit as st
 import bpEncode
 import nltk
 from nltk.corpus import brown
+import pandas as pd 
+import base64
+
+def set_background(jpeg):
+    with open(jpeg, "rb") as f:
+        encoded_str = base64.b64encode(f.read()).decode()
+
+    css = f"""
+    <style>
+    .stApp {{
+        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("data:image/jpeg;base64,{encoded_str}");
+        background-size: cover;
+        backround-position: center;
+        background-repeat: no-repeat;
+    }}
+
+    section[data-textid="stSidebar"] {{
+        background-color: rgba(15, 15, 15, 0.85);
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
 
 st.set_page_config(
     page_title="BPE Tokenizer Demo",
     page_icon="👾",
     layout="centered"
 )
+
+set_background("images/owl_scowl.jpeg")
 
 nltk.download('brown')
 
@@ -101,6 +125,25 @@ if sample:
 
     st.markdown("**Sub-Word tokens:**")
     st.code(" ".join(decoded), language="text")
+    
+    st.divider()
 
+    st.subheader("Token Density Map")
+
+    words = sample.split()
+    token_counts = []
+
+    for word in words:
+        word_tokens = tokenizer.tokenize(word)
+        token_counts.append(len(word_tokens))
+
+    df = pd.DataFrame({
+        "word": words,
+        "tokens": token_counts
+    })
+
+    chart_data = df.set_index("word")
+
+    st.line_chart(chart_data)
 
 
