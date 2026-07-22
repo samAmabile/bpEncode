@@ -8,6 +8,12 @@ import bpEncode
 import nltk
 from nltk.corpus import brown
 
+st.set_page_config(
+    page_title="BPE Tokenizer Demo",
+    page_icon="👾",
+    layout="centered"
+)
+
 nltk.download('brown')
 
 def build_training_corpus(limit=10000):
@@ -30,42 +36,63 @@ def build_training_corpus(limit=10000):
 
 
 @st.cache_resource
-def load_tokenizer():
+def load_tokenizer(vocab_limit):
 
     tokenizer = bpEncode.BPE()
 
     corpus = build_training_corpus()
 
+    tokenizer.setVocabLimit(vocab_limit)
+
+    modelPath = f"bpe_models/brown_{vocab_limit}.bin"
+
     try: 
-        tokenizer.load("bpe_models/brown.bin")
-        print("Loaded pre-trained model...")
+        tokenizer.load(modelPath)
+        #print("Loaded pre-trained model...")
 
     except:
-        print("Training new model on Brown Corpus...")
+        #print("Training new model on Brown Corpus...")
         corpus = build_training_corpus()
         dictionary = tokenizer.fitWords(corpus)
-        tokenizer.save("bpe_models/brown.bin")
+        tokenizer.save(modelPath)
     
     return tokenizer
-
 
 st.title("Byte-pair Encoding (BPE) tokenizer")
 st.markdown("See how BPE breaks text up into tokens")
 
-with st.spinner("Loading Brown corpus into tokenizer..."):
-    tokenizer = load_tokenizer()
+st.sidebar.header("Configuration")
+vocab_limit = st.sidebar.selectbox(
+        "Vocabulary Limit",
+        options=[500, 1000, 5000, 10000],
+        index=1 
+)
 
-st.success("Ready!")
+with st.spinner(f"Loading {vocab_limit} token limit Brown corpus into tokenizer..."):
+    tokenizer = load_tokenizer(vocab_limit)
+
+st.sidebar.success("Model Loaded Succesfully")
 
 sample = st.text_input("Enter text to tokenize:", value="The quick brown mink mourned the folly of mankind")
 
 if sample:
     tokens = tokenizer.tokenize(sample)
 
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric(label="Total Tokens", value=len(tokens))
+    with col2:
+        words = len(sample.split())
+        ratio = round(len(tokens) / max(1, words), 2)
+        st.metric(label="Tokens / Word", value=ratio)
+
+    st.divider()
+
     st.subheader("Breakdown")
     st.markdown("**Byte-Pair token IDs:**")
     tokenstr = " ".join(str(t) for t in tokens)
-    st.code(tokens)
+    st.code(tokenstr)
 
     decoded = [] 
     for token in tokens:
