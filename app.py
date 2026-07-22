@@ -42,7 +42,7 @@ def load_tokenizer(vocab_limit):
 
     corpus = build_training_corpus()
 
-    tokenizer.setVocabLimit(vocab_limit)
+    tokenizer.setVocabSize(vocab_limit)
 
     modelPath = f"bpe_models/brown_{vocab_limit}.bin"
 
