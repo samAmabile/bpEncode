@@ -20,7 +20,7 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-color: rgba(15, 18, 25, 0.4);
+        background-color: rgba(15, 18, 25, 0.1);
     }}
     .stApp::before {{
         content: "";
@@ -33,7 +33,7 @@ def set_background(jpg):
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
-        opacity: 0.7;
+        opacity: 0.2;
         z-index: -1;
     }}
 
@@ -48,7 +48,7 @@ def set_background(jpg):
     }}
 
     h1, h2, h3, h4, h5, h6, p, span, label, div[data-testid="stMarkdownContainer"] {{
-        color: #000000 !important;
+        color: #00FFFF !important;
     }}
 
     input {{
