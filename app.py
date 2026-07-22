@@ -20,7 +20,7 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-image: linear-gradient(rgba(20, 24, 33, 0.03), rgba(20, 24, 33, 0.03)), url("data:image/jpg;base64,{encoded_str}");
+        background-image: linear-gradient(rgba(20, 24, 33, 0.003), rgba(20, 24, 33, 0.003)), url("data:image/jpg;base64,{encoded_str}");
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
