@@ -24,7 +24,7 @@ def sanitize_text(text_raw):
     else:
         text = str(text_raw).encode("utf-8", errors="ignore")
 
-    clean = text.decode("utf-8", errors="ignore")
+    clean = text.decode("utf-8", errors="replace")
 
     clean_txt = unicodedata.normalize("NFKC", clean)
 
@@ -173,7 +173,10 @@ if raw_sample:
 
     decoded = [] 
     for token in tokens:
-        chunk = tokenizer.decode([token])
+        try:
+            chunk = tokenizer.decode([token])
+        except (UnicodeDecodeError, RuntimeError):
+            chunk = ""
         decoded.append(chunk)
 
     st.markdown("**Sub-Word tokens:**")
