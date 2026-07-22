@@ -20,14 +20,14 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("data:image/jpg;base64,{encoded_str}");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url("data:image/jpg;base64,{encoded_str}");
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
     }}
 
     section[data-testid="stSidebar"] {{
-        background-color: rgba(15, 15, 15, 0.85);
+        background-color: rgba(15, 15, 15, 0.25);
     }}
     </style>
     """
@@ -152,7 +152,7 @@ if sample:
     fig.patch.set_facecolor('#0e1117')
     ax.set_facecolor('#0e1117')
 
-    sns.lineplot(data=df, x="word", y="tokens", marker="o", ax=ax, color="ff4b4b", linewidth=2.5)
+    sns.lineplot(data=df, x="word", y="tokens", marker="o", ax=ax, color="#ff4b4b", linewidth=2.5)
 
     ax.set_xlabel("Word", color="white")
     ax.set_ylabel("Tokens", color="white")
