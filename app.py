@@ -20,14 +20,25 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-image: linear-gradient(rgba(20, 24, 33, 0.003), rgba(20, 24, 33, 0.003)), url("data:image/jpg;base64,{encoded_str}");
+        background-color: #0f1219;
+    }}
+    .stApp::before {{
+        content: "";
+        position: fixed;
+        top: 0; 
+        left: 0; 
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/jpg;base64,{encoded_str}");
         background-size: cover;
         backround-position: center;
         background-repeat: no-repeat;
+        opacity: 0.1;
+        z-index: -1;
     }}
 
     .stMain, div.block-container {{
-        backround-color: rgba(20, 24, 33, 0.2);
+        backround-color: rgba(15, 18, 25, 0.4);
         border-radius: 12px;
         padding: 2rem;
     }}
@@ -37,7 +48,7 @@ def set_background(jpg):
     }}
 
     h1, h2, h3, h4, h5, h6, p, span, label, div[data-testid="stMarkdownContainer"] {{
-        color: #0284c7 !important;
+        color: #000000 !important;
     }}
 
     input {{
