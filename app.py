@@ -18,7 +18,7 @@ def sanitize_text(text):
     if not text:
         return ""
 
-    utf8_bytes = text.encode("utf-8", errors="ignore")
+    utf8_bytes = text.encode("utf-8", errors="replace")
 
     clean = utf8_bytes.decode("utf-8")
 
