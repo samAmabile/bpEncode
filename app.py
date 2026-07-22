@@ -20,7 +20,7 @@ def set_background(jpg):
     css = f"""
     <style>
     .stApp {{
-        background-color: #FFFFFF;
+        background-color: rgba(15, 18, 25, 0.4);
     }}
     .stApp::before {{
         content: "";
